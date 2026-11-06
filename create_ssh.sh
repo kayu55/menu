@@ -2,8 +2,8 @@
 
 NC='\033[0;37m' 
 clear
-NS=$( cat /etc/xray/dns )
-PUB=$( cat /etc/slowdns/server.pub )
+domain_hasil=$(cat /root/nsdomain 2>/dev/null)
+PUB=$(cat /etc/slowdns/server.pub 2>/dev/null)
 domain=$(cat /etc/xray/domain)
 
 echo -e "\033[0;34m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
@@ -50,7 +50,7 @@ echo -e "PAYLOD HANDED : GET / HTTP/1.1[crlf]Host: edu.ruangguru.com[crlf][crlf]
 echo -e ""
 echo -e "PAYLOD WS/TLS : GET wss://[host_port]/ HTTP/1.1[crlf]Host: [host_port][crlf]Upgrade: Websocket[crlf]Connection: Keep-Alive[crlf][crlf]"
 echo -e " "
-echo -e "Host Slowdns : ${NS}"
+echo -e "Host Slowdns : $domain_hasil"
 echo -e "Pub Key      : ${PUB}"
 echo -e " "
 echo -e "\033[0;34m══════════════════════════════════${NC}"
@@ -83,7 +83,7 @@ echo -e "PAYLOD HANDED : GET / HTTP/1.1[crlf]Host: edu.ruangguru.com[crlf][crlf]
 echo -e ""
 echo -e "PAYLOD WS/TLS : GET wss://[host_port]/ HTTP/1.1[crlf]Host: [host_port][crlf]Upgrade: Websocket[crlf]Connection: Keep-Alive[crlf][crlf]"
 echo -e " "
-echo -e "Host Slowdns : ${NS}"
+echo -e "Host Slowdns : $domain_hasil"
 echo -e "Pub Key      : ${PUB}"
 echo -e " "
 echo -e "\033[0;34m══════════════════════════════════${NC}"

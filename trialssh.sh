@@ -15,8 +15,8 @@ clear
 clear
 NC='\033[0;37m' 
 clear
-NS=$( cat /etc/xray/dns )
-PUB=$( cat /etc/slowdns/server.pub )
+domain_hasil=$(cat /root/nsdomain 2>/dev/null)
+PUB=$(cat /etc/slowdns/server.pub 2>/dev/null)
 domen=$(cat /etc/xray/domain)
 #portsshws=`cat ~/log-install.txt | grep -w "SSH Websocket" | cut -d: -f2 | awk '{print $1}'`
 #wsssl=`cat /root/log-install.txt | grep -w "SSH SSL Websocket" | cut -d: -f2 | awk '{print $1}'`
@@ -71,7 +71,7 @@ echo -e "PAYLOD WS : GET / HTTP/1.1[crlf]Host: [host_port][crlf]Upgrade: Websock
 echo -e ""
 echo -e "PAYLOD WS/TLS : GET wss://[host_port]/ HTTP/1.1[crlf]Host: [host_port][crlf]Upgrade: Websocket[crlf]Connection: Keep-Alive[crlf][crlf]"
 echo -e " "
-echo -e "Host Slowdns : ${NS}"
+echo -e "Host Slowdns : $domain_hasil"
 echo -e "Pub Key      : ${PUB}"
 echo -e " "
 echo -e "${PURPLE}════════════════════════════════════${NC}"
@@ -100,7 +100,7 @@ echo -e "PAYLOD WS : GET / HTTP/1.1[crlf]Host: [host_port][crlf]Upgrade: Websock
 echo -e " "
 echo -e "PAYLOD WS/TLS : GET wss://[host_port]/ HTTP/1.1[crlf]Host: [host_port][crlf]Upgrade: Websocket[crlf]Connection: Keep-Alive[crlf][crlf]"
 echo -e " "
-echo -e "Host Slowdns : ${NS}"
+echo -e "Host Slowdns : $domain_hasil"
 echo -e "Pub Key      : ${PUB}"
 echo -e " "
 echo -e "${PURPLE}════════════════════════════════════${NC}"
