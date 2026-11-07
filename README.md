@@ -6,3 +6,7 @@ wget -O create_ssh "raw.githubusercontent.com/kayu55/menu/main/create_ssh.sh" &&
 ````
 wget -O trialssh "raw.githubusercontent.com/kayu55/menu/main/trialssh.sh" && chmod +x trialssh
 ````
+
+````
+wget -O menu "raw.githubusercontent.com/kayu55/menu/main/menu.sh" && chmod +x menu
+````
