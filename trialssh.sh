@@ -43,8 +43,8 @@ clear
 echo userdel -f "$Login" | at now + $pup minutes
 echo "tunnel ssh ${Login}" | at now +$pup minutes &> /dev/null
 clear
-echo -e "${PURPLE}═════════════\033[0;33mSSH ACCOUNTS\033[0;34m═══════════${NC}"
-echo -e "${PURPLE}════════════════════════════════════${NC}"
+echo -e "${PURPLE}<<<< SSH ACCOUNTS >>>> ${NC}"
+echo -e "${PURPLE}${NC}"
 echo -e "Username    : $Login" 
 echo -e "Password    : $Pass"
 echo -e "Expired On  : $pup menit" 
@@ -56,7 +56,7 @@ echo -e "PUB KEY     : $PUB"
 echo -e "DOMAIN HOST : ify22.aryablitar.com" 
 echo -e "PORT DNS    : 53"
 echo -e " "
-echo -e "\033[0;32m Sc By Arya Blitar${NC}" 
+echo -e "\033[0;32mSc By Arya Blitar${NC}" 
 echo ""
 read -n 1 -s -r -p "   Press any key to back on menu"
 menu
