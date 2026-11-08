@@ -25,8 +25,7 @@ echo -e "${YELLOW}════════════════════�
 read -p " Pilih menu [0-5] : " opt
 case $opt in
 1) create-slowdns ;;
-1) trialssh ;;
-#2) Login=trial$(date +%H%M%S); Pass=123; useradd -e $(date -d "1 days" +"%Y-%m-%d") -s /bin/false -M $Login; echo -e "$Pass\n$Pass\n" | passwd $Login &>/dev/null; echo -e "\nTrial Berhasil! User: $Login Pass: $Pass Exp: 1 Hari"; read -n 1 -s -r -p " Press any key..."; menu ;;
+2) trialssh " Press any key..."; menu ;;
 3) read -p " Username yg dihapus : " del; userdel -f $del; echo "Akun $del dihapus"; sleep 1; menu ;;
 4) echo ""; echo "=== Daftar User SlowDNS ==="; awk -F: '$3>=1000 && $1!="nobody" {print $1}' /etc/passwd; echo ""; read -n 1 -s -r -p " Press any key..."; menu ;;
 5) echo ""; dig @8.8.8.8 nsify.aryablitar.com A +short; dig @8.8.8.8 nsify.aryablitar.com NS +short; echo ""; read -n 1 -s -r -p " Press any key..."; menu ;;
