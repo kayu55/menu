@@ -19,6 +19,7 @@ echo -e " ${WHITE}[3]${NC} Hapus Akun"
 echo -e " ${WHITE}[4]${NC} Lihat Semua Akun"
 echo -e " ${WHITE}[5]${NC} Cek DNS NS Domain"
 echo -e " ${WHITE}[6]${NC} Cek User Login"
+echo -e " ${WHITE}[7]${NC} Speedtest_cli "
 echo -e " ${WHITE}[0]${NC} Keluar"
 echo -e "${YELLOW}══════════════════════════════════════════════════${NC}"
 read -p " Pilih menu [0-5] : " opt
@@ -29,6 +30,7 @@ case $opt in
 4) echo ""; echo "=== Daftar User SlowDNS ==="; awk -F: '$3>=1000 && $1!="nobody" {print $1}' /etc/passwd; echo ""; read -n 1 -s -r -p " Press any key..."; menu ;;
 5) echo ""; dig @8.8.8.8 nsify.aryablitar.com A +short; dig @8.8.8.8 nsify.aryablitar.com NS +short; echo ""; read -n 1 -s -r -p " Press any key..."; menu ;;
 6) cekssh " Press any key..."; menu ;;
+7) speed ;;
 0) exit 0 ;;
 *) echo "Pilihan salah!"; sleep 1; menu ;;
 esac
