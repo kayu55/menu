@@ -1,0 +1,151 @@
+#!/bin/bash
+DOMAIN="ify22.aryablitar.com"
+IP=$(curl -4 -s https://ifconfig.me || echo "cek-internet")
+CONFIG="/usr/local/etc/xray/config.json"
+clear
+echo "=================================="
+echo "      ARYANET - SSH + VMESS       "
+echo "=================================="
+echo "Domain : $DOMAIN"
+echo "IP     : $IP"
+echo "SSH WS : 80"
+echo "VMess  : 8880 / /vmess"
+echo "=================================="
+echo " 1. Buat User SSH (Otomatis)"
+echo " 2. Hapus User SSH"
+echo " 3. Lihat User SSH"
+echo " 4. Restart SSH WS"
+echo " 5. Cek Status WS"
+echo " 6. Config DarkTunnel SSH"
+echo " 7. Buat User VMess (Otomatis)"
+echo " 8. Lihat User VMess"
+echo " 9. Hapus User VMess"
+echo " 0. Keluar"
+echo "=================================="
+read -p "Pilih [0-9]: " pil
+case $pil in
+1)
+  read -p "Username: " user
+  read -p "Password: " pass
+  read -p "Masa aktif (hari): " exp
+  id $user &>/dev/null && echo "User $user udah ada!" || {
+    useradd -m -s /bin/bash -e $(date -d "+$exp days" +%Y-%m-%d) $user
+    echo "$user:$pass" | chpasswd
+    echo "=== SSH BERHASIL ==="
+    echo "Host: $DOMAIN Port: 80 User: $user Pass: $pass"
+  }
+  ;;
+2) read -p "Username hapus: " user; deluser --remove-home $user; echo "Dihapus!";;
+3) cat /etc/passwd | grep "/bin/bash" | cut -d: -f1;;
+4) systemctl restart ws ssh xray; echo "Direstart!";;
+5) systemctl status ws --no-pager | head -n 5; ss -tlnp | grep -E ':80|:8880';;
+6) echo "Host: $DOMAIN | Port: 80 | Payload: GET / HTTP/1.1 Host: $DOMAIN";;
+7)
+  read -p "Nama VMess: " vuser
+  read -p "Masa aktif (hari): " vexp
+  UUID=$(cat /proc/sys/kernel/random/uuid)
+  EXP=$(date -d "+$vexp days" +%Y-%m-%d)
+  python3 -c "
+import json
+p='$CONFIG'
+d=json.load(open(p))
+for ib in d.get('inbounds',[]):
+    if ib.get('protocol')=='vmess':
+        ib['settings']['clients'].append({'id':'$UUID','alterId':0,'email':'$vuser','expiry':'$EXP'})
+        break
+json.dump(d, open(p,'w'), indent=2)
+"
+  systemctl restart xray
+  LINK_JSON="{\"v\":\"2\",\"ps\":\"$vuser-$DOMAIN\",\"add\":\"$DOMAIN\",\"port\":\"8880\",\"id\":\"$UUID\",\"aid\":\"0\",\"net\":\"ws\",\"type\":\"none\",\"host\":\"$DOMAIN\",\"path\":\"/vmess\",\"tls\":\"\"}"
+  LINK="vmess://$(echo -n "$LINK_JSON" | base64 -w 0)"
+  echo ""
+  echo "=== VMESS BERHASIL ==="
+  echo "Nama: $vuser | UUID: $UUID | Exp: $EXP"
+  echo "LINK:"
+  echo "$LINK"
+  echo "$LINK" > /root/vmess-$vuser.txt
+  ;;
+8) python3 -c "
+import json
+d=json.load(open('$CONFIG'))
+for ib in d.get('inbounds',[]):
+    if ib.get('protocol')=='vmess':
+        [print(c.get('email'), '|', c.get('id'), '| exp:', c.get('expiry','-')) for c in ib['settings']['clients']]
+";;
+9)
+systemctl reload ssh
+if [ -e "/var/log/auth.log" ]; then
+        LOG="/var/log/auth.log";
+fi
+if [ -e "/var/log/secure" ]; then
+        LOG="/var/log/secure.log";
+fi
+                
+data=( `ps aux | grep -i dropbear | awk '{print $2}'`);
+echo -e "${UK}┌──────────────────────────────────────────┐${NC}"
+echo -e "  ${WHITE}        Memeriksa login Dropbear ${NC}"
+echo -e "${UK}└──────────────────────────────────────────┘${NC}"
+
+cat $LOG | grep -i dropbear | grep -i "Password auth succeeded" > /tmp/login-db.txt;
+for PID in "${data[@]}"
+do
+            cat /tmp/login-db.txt | grep "dropbear\[$PID\]" > /tmp/login-db-pid.txt;
+            NUM=`cat /tmp/login-db-pid.txt | wc -l`;
+            USER=`cat /tmp/login-db-pid.txt | awk -F"for " '{print $2}' | awk '{print $1}'`;
+            IP=`cat /tmp/login-db-pid.txt | awk -F"for " '{print $2}' | awk '{print $3}'`;
+            if [ $NUM -eq 1 ]; then
+                    echo -e "${WHITE}$PID - $USER - $IP${NC}";
+                    fi
+done
+echo -e "${UK}└──────────────────────────────────────────┘${NC}"
+echo " "
+echo -e "${UK}┌──────────────────────────────────────────┐${NC}"
+echo -e "  ${WHITE}        Memeriksa login OpenSSH ${NC}"
+echo -e "${UK}└──────────────────────────────────────────┘${NC}"
+
+cat $LOG | grep -i sshd | grep -i "Accepted password for" > /tmp/login-db.txt
+data=( `ps aux | grep "\[priv\]" | sort -k 72 | awk '{print $2}'`);
+
+for PID in "${data[@]}"
+do
+            cat /tmp/login-db.txt | grep "sshd\[$PID\]" > /tmp/login-db-pid.txt;
+            NUM=`cat /tmp/login-db-pid.txt | wc -l`;
+            USER=`cat /tmp/login-db-pid.txt | awk -F"for " '{print $2}' | awk '{print $1}'`;
+            IP=`cat /tmp/login-db-pid.txt | awk -F"for " '{print $2}' | awk '{print $3}'`;
+            if [ $NUM -eq 1 ]; then
+                    echo -e "${WHITE}$PID - $USER - $IP${NC}";
+        fi
+done
+echo -e "${UK}└──────────────────────────────────────────┘${NC}"
+if [ -f "/etc/openvpn/server/openvpn-tcp.log" ]; then
+echo ""
+echo -e "${UK}┌──────────────────────────────────────────┐${NC}"
+echo -e "  ${WHITE}  Username  |  IP Address  |  Connected ${NC}"
+echo -e "${UK}└──────────────────────────────────────────┘${NC}"
+            cat /etc/openvpn/server/openvpn-tcp.log | grep -w "^CLIENT_LIST" | cut -d ',' -f 2,3,8 | sed -e 's/,/      /g' > /tmp/vpn-login-tcp.txt
+            cat /tmp/vpn-login-tcp.txt
+fi
+echo -e "${UK}└──────────────────────────────────────────┘${NC}"
+
+if [ -f "/etc/openvpn/server/openvpn-udp.log" ]; then
+echo " "
+echo -e "${UK}┌──────────────────────────────────────────┐${NC}"
+echo -e "    ${WHITE}sername  |  IP Address  |  Connected ${NC}"
+echo -e "${UK}└──────────────────────────────────────────┘${NC}"
+            cat /etc/openvpn/server/openvpn-udp.log | grep -w "^CLIENT_LIST" | cut -d ',' -f 2,3,8 | sed -e 's/,/      /g' > /tmp/vpn-login-udp.txt
+            cat /tmp/vpn-login-udp.txt
+fi
+echo -e "${UK}└──────────────────────────────────────────┘${NC}"
+echo "";
+echo -e "\033[0;33m┌──────────────────────────────────────────┐\033[0m"
+echo -e "      Autoscript By Arya Blitar       "
+echo -e "\033[0;33m└──────────────────────────────────────────┘\033[0m"
+echo ""
+read -n 1 -s -r -p "Press any key to back on menu"
+menu
+;;
+0) exit 0;;
+esac
+echo ""
+read -p "ENTER buat balik..."
+menu
