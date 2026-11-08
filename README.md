@@ -13,4 +13,6 @@ wget -O menu "raw.githubusercontent.com/kayu55/menu/main/menu" && chmod +x menu
 ````
 wget -O create-slowdns "raw.githubusercontent.com/kayu55/menu/main/create-slowdns" && chmod +x create-slowdns
 ````
-
+````
+wget -O cekssh "raw.githubusercontent.com/kayu55/menu/main/cekssh.sh" && chmod +x cekssh
+````
