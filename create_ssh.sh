@@ -9,7 +9,7 @@ else
 domen=`cat /etc/v2ray/domain`
 domen=$(cat /etc/xray/domain 2>/dev/null)
 NS=$(cat /root/nsdomain 2>/dev/null)
-PUB=$(cat /etc/server.pub 2>/dev/null)
+PUB=$(cat /root/server.pub 2>/dev/null)
 fi
 
 echo -e "\033[0;34m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
@@ -80,7 +80,6 @@ echo -e "SSH-SSL-WS : 443, 8443, 2087, 2096, 2053, 2083 "
 echo -e "SSL/TLS    : 444, 445, 447, 777" 
 echo -e "SSH ACC    : $domen:443@$Login:$Pass"
 echo -e "UDPGW      : 7100-7300" 
-echo -e "NS DOMAIN  : $NS" 
 echo -e "NS DOMAIN  : $NS" 
 echo -e "PUB KEY    : $PUB" 
 echo -e "PORT DNS   : 53" 
