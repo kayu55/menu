@@ -1,0 +1,38 @@
+#!/bin/bash
+clear
+clear
+clear
+NC='\033[0m'; RED='\033[1;31m'; GREEN='\033[1;32m'; CYAN='\033[1;36m'; WHITE='\033[1;37m'; YELLOW='\033[1;33m'; PURPLE='\033[1;95m'
+clear
+IP=$(curl -sS ipv4.icanhazip.com); NS=$(cat /root/nsdomain 2>/dev/null); PUB=$(cat /etc/slowdns/server.pub 2>/dev/null)
+echo -e "${YELLOW}══════════════════════════════════════════════════${NC}"
+echo -e "           ${PURPLE}MENU SLOWDNS - ARYANET${NC}"
+echo -e "${YELLOW}══════════════════════════════════════════════════${NC}"
+echo -e " ${CYAN}IP Server${NC}  : ${WHITE}$IP${NC}"
+echo -e " ${CYAN}NS Domain${NC}  : ${WHITE}$NS${NC}"
+echo -e " ${CYAN}Pub Key${NC}    : ${WHITE}$PUB${NC}"
+echo -e " ${CYAN}SlowDNS${NC}    : ${GREEN}$(systemctl is-active slowdns)${NC} | ${CYAN}BadVPN${NC} : ${GREEN}$(systemctl is-active badvpn)${NC}"
+echo -e "${YELLOW}══════════════════════════════════════════════════${NC}"
+echo -e " ${WHITE}[1]${NC} Create Akun SlowDNS"
+echo -e " ${WHITE}[2]${NC} Trial Akun "
+echo -e " ${WHITE}[3]${NC} Hapus Akun"
+echo -e " ${WHITE}[4]${NC} Lihat Semua Akun"
+echo -e " ${WHITE}[5]${NC} Cek DNS NS Domain"
+echo -e " ${WHITE}[6]${NC} Cek User Login"
+echo -e " ${WHITE}[7]${NC} Speedtest_cli "
+echo -e " ${WHITE}[8]${NC} Menu Ssh "
+echo -e " ${WHITE}[0]${NC} Keluar"
+echo -e "${YELLOW}══════════════════════════════════════════════════${NC}"
+read -p " Pilih menu [0-5] : " opt
+case $opt in
+1) create-slowdns ;;
+2) trialssh " Press any key..."; menu ;;
+3) read -p " Username yg dihapus : " del; userdel -f $del; echo "Akun $del dihapus"; sleep 1; menu ;;
+4) echo ""; echo "=== Daftar User SlowDNS ==="; awk -F: '$3>=1000 && $1!="nobody" {print $1}' /etc/passwd; echo ""; read -n 1 -s -r -p " Press any key..."; menu ;;
+5) echo ""; dig @8.8.8.8 nsify.aryablitar.com A +short; dig @8.8.8.8 nsify.aryablitar.com NS +short; echo ""; read -n 1 -s -r -p " Press any key..."; menu ;;
+6) cekssh " Press any key..."; menu ;;
+7) speed " Press any key..."; menu ;;
+8) menu-ssh " Press any key..."; menu ;;
+0) exit 0 ;;
+*) echo "Pilihan salah!"; sleep 1; menu ;;
+esac
