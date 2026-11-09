@@ -7,10 +7,9 @@ if [ "$cekray" = "XRAY" ]; then
 domen=`cat /etc/xray/domain`
 else
 domen=`cat /etc/v2ray/domain`
-domen=$(cat /etc/xray/domain 2>/dev/null)
+fi
 NS=$(cat /root/nsdomain 2>/dev/null)
 PUB=$(cat /root/server.pub 2>/dev/null)
-fi
 
 echo -e "\033[0;34m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
 echo -e "\E[42;1;37m        Create SSH Account         \E[0m"
