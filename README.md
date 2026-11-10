@@ -8,7 +8,7 @@ wget -O trialssh "raw.githubusercontent.com/kayu55/menu/main/trialssh.sh" && chm
 ````
 
 ````
-wget -O menu "raw.githubusercontent.com/kayu55/menu/main/menu" && chmod +x menu
+wget -O menu "raw.githubusercontent.com/kayu55/menu/main/menu.sh" && chmod +x menu
 ````
 ````
 wget -O create-slowdns "raw.githubusercontent.com/kayu55/menu/main/create-slowdns" && chmod +x create-slowdns
