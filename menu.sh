@@ -94,6 +94,8 @@ MODEL=$(cat /etc/os-release | grep -w PRETTY_NAME | head -n1 | sed 's/=//g' | se
 CORE=$(printf '%-1s' "$(grep -c cpu[0-9] /proc/stat)")
 #DATEVPS=$(date +'%d/%m/%Y')
 #TIMEZONE=$(printf '%(%H:%M:%S)T')
+NS=$(cat /root/nsdomain 2>/dev/null)
+PUB=$(cat /root/server.pub 2>/dev/null)
 dtoday="$(vnstat | grep today | awk '{print $2" "substr ($3, 1, 3)}')"
 utoday="$(vnstat | grep today | awk '{print $5" "substr ($6, 1, 3)}')"
 ttoday="$(vnstat | grep today | awk '{print $8" "substr ($9, 1, 3)}')"
@@ -106,6 +108,8 @@ clear
 echo -e ""
 echo -e "\E[44;1;39m ꧁࿇ SCRIPT SEDERHANA PENUH CINTA ࿇꧂ \E[0m"
 echo -e ""
+echo -e " Ns  : $NS"
+echo -e " key : $PUB" 
 echo -e "${BICyan} ┌─────────────────────────────────────────────────────┐${NC}"
 echo -e "${BICyan} │$NC\033[42m                   SYSTEM INFORMATION                ${BICyan}│${NC} "
 echo -e "${BICyan} │ "
